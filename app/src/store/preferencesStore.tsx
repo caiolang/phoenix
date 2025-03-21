@@ -35,7 +35,11 @@ export interface PreferencesProps {
    * Whether or not to show the span aside that contains details about timing, status, etc.
    * @default true
    */
-  // [TODO] Add preference for showing the project visualization type
+  projectsListGrid: boolean;
+  /**
+   * Show projects as a list or a grid
+   * @default true
+   */
   showSpanAside: boolean;
   /**
    * Whether or not the trace tree shows metrics
@@ -72,6 +76,11 @@ export interface PreferencesState extends PreferencesProps {
    * @param projectsAutoRefreshEnabled
    */
   setProjectAutoRefreshEnabled: (projectsAutoRefreshEnabled: boolean) => void;
+  /**
+   * Setter for enabling/disabling project list (vs grid view)
+   * @param projectsListGrid
+   */
+  setProjectListGrid: (projectsListGrid: boolean) => void;
   /**
    * Setter for enabling/disabling the span aside
    * @param showSpanAside
@@ -117,6 +126,10 @@ export const createPreferencesStore = (
     projectsAutoRefreshEnabled: true,
     setProjectAutoRefreshEnabled: (projectsAutoRefreshEnabled) => {
       set({ projectsAutoRefreshEnabled });
+    },
+    projectsListGrid: true,
+    setProjectListGrid: (projectsListGrid) => {
+      set({ projectsListGrid });
     },
     showSpanAside: true,
     setShowSpanAside: (showSpanAside) => {

@@ -30,6 +30,7 @@ import { ProjectsPageQuery } from "./__generated__/ProjectsPageQuery.graphql";
 import { NewProjectButton } from "./NewProjectButton";
 import { ProjectActionMenu } from "./ProjectActionMenu";
 import { ProjectsAutoRefreshToggle } from "./ProjectsAutoRefreshToggle";
+import { ProjectsListGridToggle } from "./ProjectsListGridToggle";
 // [TODO] Add preference toggle for showing the project visualization type
 
 const REFRESH_INTERVAL_MS = 10000;
@@ -53,6 +54,7 @@ export function ProjectsPageContent({
   const autoRefreshEnabled = usePreferencesContext(
     (state) => state.projectsAutoRefreshEnabled
   );
+  const showAsList = usePreferencesContext((state) => state.projectsListGrid);
   // [TODO] Add preference for showing the project visualization type
   const [notify, holder] = useNotification();
   // Convert the time range to a variable that can be used in the query
@@ -210,27 +212,43 @@ export function ProjectsPageContent({
           gap="size-100"
         >
           <ProjectsAutoRefreshToggle />
-          {/* [TODO] Add preference for showing the project visualization type */}
+          <ProjectsListGridToggle />
           <NewProjectButton />
           <ConnectedLastNTimeRangePicker />
         </Flex>
       </View>
       <View padding="size-200" width="100%">
         <ul
-          css={css`
-            display: flex;
-            flex-direction: column;
-            gap: var(--ac-global-dimension-size-200);
-            flex-wrap: nowrap;
-          `}
+          css={
+            showAsList
+              ? css`
+                  display: flex;
+                  flex-direction: column;
+                  gap: var(--ac-global-dimension-size-200);
+                  flex-wrap: nowrap;
+                `
+              : css`
+                  display: flex;
+                  flex-direction: row;
+                  gap: var(--ac-global-dimension-size-200);
+                  flex-wrap: wrap;
+                `
+          }
         >
           {projects.map((project) => (
             <li key={project.id}>
               <Link
                 to={`/projects/${project.id}`}
-                css={css`
-                  text-decoration: none;
-                `}
+                css={
+                  showAsList
+                    ? css`
+                        text-decoration: none;
+                      `
+                    : css`
+                        text-decoration: none;
+                        display: inline-block;
+                      `
+                }
               >
                 <ProjectItem
                   project={project}
@@ -291,6 +309,7 @@ function ProjectItem({
     gradientStartColor,
     gradientEndColor,
   } = project;
+  const showAsList = usePreferencesContext((state) => state.projectsListGrid);
   const lastUpdatedText = useMemo(() => {
     if (endTime) {
       return `Last updated  ${formatDistance(new Date(endTime), new Date(), { addSuffix: true })}`;
@@ -299,23 +318,44 @@ function ProjectItem({
   }, [endTime]);
   return (
     <div
-      css={css`
-        padding: var(--ac-global-dimension-size-200);
-        border: 1px solid var(--ac-global-color-grey-400);
-        background-color: var(--ac-global-color-grey-100);
-        box-shadow:
-          0 0 1px 0px var(--ac-global-color-grey-400) inset,
-          0 0 1px 0px var(--ac-global-color-grey-400);
-        border-radius: var(--ac-global-rounding-medium);
-        transition: border-color 0.2s;
-        &:hover {
-          border-color: var(--ac-global-color-primary);
-        }
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: var(--ac-global-dimension-size-200);
-      `}
+      css={
+        showAsList
+          ? css`
+              padding: var(--ac-global-dimension-size-200);
+              border: 1px solid var(--ac-global-color-grey-400);
+              background-color: var(--ac-global-color-grey-100);
+              box-shadow:
+                0 0 1px 0px var(--ac-global-color-grey-400) inset,
+                0 0 1px 0px var(--ac-global-color-grey-400);
+              border-radius: var(--ac-global-rounding-medium);
+              transition: border-color 0.2s;
+              &:hover {
+                border-color: var(--ac-global-color-primary);
+              }
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              gap: var(--ac-global-dimension-size-200);
+            `
+          : css`
+              padding: var(--ac-global-dimension-size-200);
+              border: 1px solid var(--ac-global-color-grey-400);
+              background-color: var(--ac-global-color-grey-100);
+              box-shadow:
+                0 0 1px 0px var(--ac-global-color-grey-400) inset,
+                0 0 1px 0px var(--ac-global-color-grey-400);
+              border-radius: var(--ac-global-rounding-medium);
+              width: var(--ac-global-dimension-size-3600);
+              transition: border-color 0.2s;
+              &:hover {
+                border-color: var(--ac-global-color-primary);
+              }
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              gap: var(--ac-global-dimension-size-200);
+            `
+      }
     >
       <Flex direction="row" justifyContent="space-between" alignItems="start">
         <Flex direction="row" gap="size-100" alignItems="center" minWidth={0}>
