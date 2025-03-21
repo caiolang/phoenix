@@ -30,6 +30,7 @@ import { ProjectsPageQuery } from "./__generated__/ProjectsPageQuery.graphql";
 import { NewProjectButton } from "./NewProjectButton";
 import { ProjectActionMenu } from "./ProjectActionMenu";
 import { ProjectsAutoRefreshToggle } from "./ProjectsAutoRefreshToggle";
+// [TODO] Add preference toggle for showing the project visualization type
 
 const REFRESH_INTERVAL_MS = 10000;
 const PAGE_SIZE = 50;
@@ -52,6 +53,7 @@ export function ProjectsPageContent({
   const autoRefreshEnabled = usePreferencesContext(
     (state) => state.projectsAutoRefreshEnabled
   );
+  // [TODO] Add preference for showing the project visualization type
   const [notify, holder] = useNotification();
   // Convert the time range to a variable that can be used in the query
   const timeRangeVariable = useMemo(() => {
@@ -208,6 +210,7 @@ export function ProjectsPageContent({
           gap="size-100"
         >
           <ProjectsAutoRefreshToggle />
+          {/* [TODO] Add preference for showing the project visualization type */}
           <NewProjectButton />
           <ConnectedLastNTimeRangePicker />
         </Flex>
@@ -216,9 +219,9 @@ export function ProjectsPageContent({
         <ul
           css={css`
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             gap: var(--ac-global-dimension-size-200);
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
           `}
         >
           {projects.map((project) => (
@@ -304,7 +307,6 @@ function ProjectItem({
           0 0 1px 0px var(--ac-global-color-grey-400) inset,
           0 0 1px 0px var(--ac-global-color-grey-400);
         border-radius: var(--ac-global-rounding-medium);
-        width: var(--ac-global-dimension-size-3600);
         transition: border-color 0.2s;
         &:hover {
           border-color: var(--ac-global-color-primary);

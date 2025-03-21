@@ -6,9 +6,9 @@ export function Link(props: LinkProps) {
     // Stop propagation to prevent the click from being handled by the parent
     <div
       onClick={(e) => e.stopPropagation()}
-      css={css`
-        display: inline-block;
-      `}
+      // css={css`
+      //   display: inline-block;
+      // `}
     >
       <RouterLink
         css={css`

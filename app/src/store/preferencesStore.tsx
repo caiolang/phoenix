@@ -35,6 +35,7 @@ export interface PreferencesProps {
    * Whether or not to show the span aside that contains details about timing, status, etc.
    * @default true
    */
+  // [TODO] Add preference for showing the project visualization type
   showSpanAside: boolean;
   /**
    * Whether or not the trace tree shows metrics
